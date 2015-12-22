@@ -4,26 +4,35 @@ package org.tondo.issuemanager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.github.api.GitHubIssue;
 import org.springframework.social.github.api.impl.GitHubTemplate;
 import org.springframework.stereotype.Service;
 
 // this class will be picked by @ComponentScan
 @Service
-public class IssueManager {
+public class IssueManager implements InitializingBean {
 	
-	private String githubToken = "59093dc58055434349ce37f9ddac83948449eb22";
-	private String[] repos  = new String[]{"spring-boot", "spring-boot-issues"};
+	@Value("${token}")
+	private String githubToken;
+	
+	@Value("${repos}")
+	private String[] repos;
+	
+	// after : means default value for this property used if any source for this proprty is found
+	@Value("${username:spring-projects}")
+	private String userName;
 	
 	// main class for interactiong with github
 	// probably constructor with token for OAuth will be needed
-	private GitHubTemplate githubTemplate = new GitHubTemplate();
+	private GitHubTemplate githubTemplate;
 	
 	
 	public List<Issue> findOpenIssues() {
 		List<Issue> openIssues = new ArrayList<>();
 		for (String repo  : this.repos) {
-			openIssues.addAll(findOpenIssues("spring-projects", repo));
+			openIssues.addAll(findOpenIssues(userName, repo));
 		}
 		return openIssues;
 	}
@@ -38,5 +47,11 @@ public class IssueManager {
 			}
 		}
 		return openIssues;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// template will be created after all properties are set by Spring container
+		this.githubTemplate = new GitHubTemplate(githubToken);
 	}
 }
