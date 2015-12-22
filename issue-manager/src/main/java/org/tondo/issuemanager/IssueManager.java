@@ -23,12 +23,18 @@ public class IssueManager {
 	public List<Issue> findOpenIssues() {
 		List<Issue> openIssues = new ArrayList<>();
 		for (String repo  : this.repos) {
-			// here will be needed token authorization for user
-			List<GitHubIssue> ghIssues = githubTemplate.repoOperations().getIssues("spring-projects", repo);
-			for (GitHubIssue i : ghIssues) {
-				if ("open".equals(i.getState())) {
-					openIssues.add(new Issue(repo, i));
-				}
+			openIssues.addAll(findOpenIssues("spring-projects", repo));
+		}
+		return openIssues;
+	}
+	
+	public List<Issue> findOpenIssues(String user, String repo) {
+		List<Issue> openIssues = new ArrayList<>();
+		// here will be needed token authorization for user
+		List<GitHubIssue> ghIssues = githubTemplate.repoOperations().getIssues(user, repo);
+		for (GitHubIssue i : ghIssues) {
+			if ("open".equals(i.getState())) {
+				openIssues.add(new Issue(repo, i));
 			}
 		}
 		return openIssues;
