@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+body {
+	background-color: #cccccc;
+	font-family: arial,sans-serif;
+}
+
+.bookHeadline {
+	font-size: 12pt;
+	font-weight: bold;
+}
+
+.bookDescription {
+	font-sze: 15pt;
+}
+
+label {
+	font-weight: bold;
+}
