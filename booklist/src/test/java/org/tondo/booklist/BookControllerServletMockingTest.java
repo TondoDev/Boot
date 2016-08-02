@@ -41,7 +41,7 @@ public class BookControllerServletMockingTest {
 	}
 	
 	@Test
-	public void testSomething() throws Exception {
+	public void testBookAdd() throws Exception {
 		// ensure DB fore reader is empty
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/a/test"))
 			.andExpect(MockMvcResultMatchers.status().isOk())
@@ -59,12 +59,13 @@ public class BookControllerServletMockingTest {
 					.andExpect(MockMvcResultMatchers.header().string("Location", "/a/test"));
 		
 		Book referenceBook = new Book();
-		referenceBook.setId(1L);	// expected that key auto-generation will start with 1
+		referenceBook.setId(1L);			// expected that key auto-generation will start with 1
 		referenceBook.setReader("test");	// same as specified in URL
 		referenceBook.setIsbn("464df46sd4asd");
 		referenceBook.setTitle("Spring Boot");
 		referenceBook.setDescription("cool stuff");
 		
+		// read back inserted data
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/a/test"))
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attributeExists("books"))
