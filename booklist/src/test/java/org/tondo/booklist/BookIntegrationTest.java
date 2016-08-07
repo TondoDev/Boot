@@ -46,5 +46,6 @@ public class BookIntegrationTest {
 		RestTemplate rest = new RestTemplate();
 		ResponseEntity<String> response = rest.getForEntity("http://localhost:8080/a/ahoj", String.class);
 		Assert.assertEquals("Page should be found and returned", HttpStatus.OK, response.getStatusCode());
+		System.err.println(response.getBody());
 	}
 }
